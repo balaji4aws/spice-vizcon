@@ -1,0 +1,14 @@
+# Spice-warm, accessible theme for "The Secret Life of Spices"
+[theme]
+base = "light"
+primaryColor = "#C1440E"          # chili red (accent / interactive)
+backgroundColor = "#FBF6EE"       # warm parchment
+secondaryBackgroundColor = "#F3E7D3"  # cinnamon cream (cards/sidebar)
+textColor = "#2B2016"             # dark clove brown (high contrast on parchment)
+font = "sans serif"
+
+[server]
+headless = true
+
+[browser]
+gatherUsageStats = false

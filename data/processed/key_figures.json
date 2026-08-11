@@ -1,0 +1,221 @@
+{
+  "meta": {
+    "latest_year": 2023,
+    "base_year": 1995,
+    "n_countries": 198,
+    "n_spices_total": 9,
+    "n_dried_spices": 8,
+    "crosswalk_matched": 195,
+    "crosswalk_unmatched": 3,
+    "unmatched_examples": [
+      "Belgium-Luxembourg",
+      "Serbia and Montenegro",
+      "Sudan (former)"
+    ]
+  },
+  "act1_boom": {
+    "ginger_multiple": 6.52,
+    "ginger_pct": 552.4,
+    "ginger_base": 745109.7,
+    "ginger_latest": 4861254.3,
+    "anise_multiple": 9.2,
+    "anise_pct": 819.8,
+    "growth_all": {
+      "Anise/Cumin/Coriander": {
+        "multiple": 9.2,
+        "pct": 819.8
+      },
+      "Chillies (dry)": {
+        "multiple": 3.29,
+        "pct": 228.6
+      },
+      "Chillies (green)": {
+        "multiple": 2.89,
+        "pct": 189.4
+      },
+      "Cinnamon": {
+        "multiple": 2.94,
+        "pct": 194.1
+      },
+      "Cloves": {
+        "multiple": 1.98,
+        "pct": 97.8
+      },
+      "Ginger": {
+        "multiple": 6.52,
+        "pct": 552.4
+      },
+      "Nutmeg/Mace/Cardamom": {
+        "multiple": 4.01,
+        "pct": 301.4
+      },
+      "Pepper": {
+        "multiple": 3.78,
+        "pct": 278.0
+      },
+      "Vanilla": {
+        "multiple": 2.53,
+        "pct": 153.2
+      }
+    }
+  },
+  "act2_grown_eaten": {
+    "usa_self_sufficiency_pct": 0.2,
+    "usa_production": 661.8,
+    "usa_consumption": 398652.4,
+    "n_reexport_hubs": 12,
+    "top_hub": {
+      "area": "United Arab Emirates",
+      "export": 107211.6,
+      "production": 0.0,
+      "import": 147057.7,
+      "grows_pct_of_exports": 0.0
+    },
+    "least_self_sufficient_big": [
+      {
+        "area": "Germany",
+        "cca3": "DEU",
+        "continent": "Europe",
+        "production": 0.0,
+        "import": 100147.8,
+        "export": 39468.8,
+        "consumption": 60678.9,
+        "import_dependence_pct": 165.0,
+        "self_sufficiency_pct": 0.0
+      },
+      {
+        "area": "Saudi Arabia",
+        "cca3": "SAU",
+        "continent": "Asia",
+        "production": 0.0,
+        "import": 83306.9,
+        "export": 10964.4,
+        "consumption": 72342.6,
+        "import_dependence_pct": 115.2,
+        "self_sufficiency_pct": 0.0
+      },
+      {
+        "area": "United Kingdom of Great Britain and Northern Ireland",
+        "cca3": "GBR",
+        "continent": "Europe",
+        "production": 0.0,
+        "import": 72155.0,
+        "export": 4724.5,
+        "consumption": 67430.5,
+        "import_dependence_pct": 107.0,
+        "self_sufficiency_pct": 0.0
+      },
+      {
+        "area": "United States of America",
+        "cca3": "USA",
+        "continent": "North America",
+        "production": 661.8,
+        "import": 428600.3,
+        "export": 30609.7,
+        "consumption": 398652.4,
+        "import_dependence_pct": 107.5,
+        "self_sufficiency_pct": 0.2
+      },
+      {
+        "area": "Canada",
+        "cca3": "CAN",
+        "continent": "North America",
+        "production": 12427.0,
+        "import": 48261.9,
+        "export": 7998.6,
+        "consumption": 52690.4,
+        "import_dependence_pct": 91.6,
+        "self_sufficiency_pct": 23.6
+      },
+      {
+        "area": "Malaysia",
+        "cca3": "MYS",
+        "continent": "Asia",
+        "production": 52638.9,
+        "import": 140012.5,
+        "export": 11721.8,
+        "consumption": 180929.7,
+        "import_dependence_pct": 77.4,
+        "self_sufficiency_pct": 29.1
+      },
+      {
+        "area": "Japan",
+        "cca3": "JPN",
+        "continent": "Asia",
+        "production": 45032.8,
+        "import": 86361.6,
+        "export": 314.3,
+        "consumption": 131080.1,
+        "import_dependence_pct": 65.9,
+        "self_sufficiency_pct": 34.4
+      },
+      {
+        "area": "Republic of Korea",
+        "cca3": "KOR",
+        "continent": "Asia",
+        "production": 26012.0,
+        "import": 35176.3,
+        "export": 3764.9,
+        "consumption": 57423.4,
+        "import_dependence_pct": 61.3,
+        "self_sufficiency_pct": 45.3
+      }
+    ]
+  },
+  "act3_cloves": {
+    "indonesia_share_pct_latest": 72.8,
+    "indonesia_self_consumption_pct_latest": 107.4,
+    "world_cloves_latest": 185691.2,
+    "cloves_top_producer": {
+      "area": "Indonesia",
+      "share_pct": 72.8
+    }
+  },
+  "vanilla": {
+    "world_vanilla_latest_t": 6921.6,
+    "madagascar_share_pct_latest": 45.0,
+    "madagascar_share_pct_2000": 23.4,
+    "chilli_dry_world_latest_t": 5821857.8,
+    "chilli_vs_vanilla_multiple": 841.0
+  },
+  "concentration_top1": {
+    "Anise/Cumin/Coriander": {
+      "area": "India",
+      "share_pct": 69.3
+    },
+    "Chillies (dry)": {
+      "area": "India",
+      "share_pct": 47.8
+    },
+    "Chillies (green)": {
+      "area": "China, mainland",
+      "share_pct": 49.7
+    },
+    "Cinnamon": {
+      "area": "China, mainland",
+      "share_pct": 38.5
+    },
+    "Cloves": {
+      "area": "Indonesia",
+      "share_pct": 72.8
+    },
+    "Ginger": {
+      "area": "India",
+      "share_pct": 45.3
+    },
+    "Nutmeg/Mace/Cardamom": {
+      "area": "Guatemala",
+      "share_pct": 43.4
+    },
+    "Pepper": {
+      "area": "Viet Nam",
+      "share_pct": 30.1
+    },
+    "Vanilla": {
+      "area": "Madagascar",
+      "share_pct": 45.0
+    }
+  },
+  "world_dried_total_latest_t": 15018402.1,
+  "world_dried_total_base_t": 3282755.5
+}
