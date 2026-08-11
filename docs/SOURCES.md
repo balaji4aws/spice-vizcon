@@ -1,14 +1,17 @@
 # Data Sources & Citations
 
-## Primary dataset — FAOSTAT (Food and Agriculture Organization of the United Nations)
-- **What:** Production and trade (import/export) quantities, in tonnes, by country and year, for
-  9 spice items; apparent domestic consumption derived as Production + Import − Export.
+## Primary dataset (as used) — Kaggle: "Global Spice Consumption" (harishthakur995)
+- **What:** A FAOSTAT-derived table of spice production and trade (import/export) in tonnes, by
+  country and year, for 9 spice items, with **apparent domestic consumption pre-computed** as
+  Production + Import − Export.
 - **Coverage:** ~200 countries/territories, 1993–2023 (this story uses 1995–2023).
-- **Public portals:**
+- **Source as used:** https://www.kaggle.com/datasets/harishthakur995/global-spice-consumption
+- **Upstream origin — FAOSTAT (Food and Agriculture Organization of the UN):**
   - Crops & livestock production: https://www.fao.org/faostat/en/#data/QCL
   - Crops & livestock trade: https://www.fao.org/faostat/en/#data/TCL
-- **TO CONFIRM before final submit:** paste the exact FAOSTAT query/download URL (or the Kaggle
-  mirror) your team originally used, so the citation is the precise source.
+- **Honest note:** we used the Kaggle-compiled dataset above (which is built from FAOSTAT and
+  already carries a derived consumption column); we did not pull a direct FAOSTAT extract
+  ourselves. We name both the dataset as used and its upstream origin.
 
 ## Reference layer — World Population dataset (Kaggle)
 - **What:** Population by country for snapshot years 1970–2022, plus area, density, growth rate,

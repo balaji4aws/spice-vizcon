@@ -179,8 +179,12 @@ are the authoritative ones.
 
 ## 8. Open items / to re-verify before final submission
 
-- [ ] Confirm the exact public FAOSTAT download URL/citation the team used originally.
-- [ ] Confirm the exact Kaggle dataset URL for the population file.
+- [x] Primary dataset provenance confirmed: **Kaggle "Global Spice Consumption" (harishthakur995)**,
+      https://www.kaggle.com/datasets/harishthakur995/global-spice-consumption — a FAOSTAT-derived
+      table (consumption pre-computed). Upstream origin: FAOSTAT (FAO of the UN). Earlier drafts
+      cited FAOSTAT directly, which overstated provenance; corrected to name the dataset as used.
+- [x] Population file: Kaggle "World Population Dataset" (iamsouravbanerjee); upstream UN WPP /
+      World Population Review.
 - [ ] Add the external citation(s) for the kretek/clove-cigarette explanation (Finding 3 / "Up in Smoke").
 
 (These are placeholders to fill with the team's real source links — not fabricated URLs.)

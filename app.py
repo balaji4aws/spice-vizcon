@@ -2,7 +2,7 @@
 The Secret Life of Spices — Grown There, Eaten Here
 VizCon 2026 entry (theme: "How the world lives, thrives, and connects").
 
-A three-act data story built on FAOSTAT global spice data (primary) with a world
+A three-act data story built on a FAOSTAT-derived global spice dataset (primary) with a world
 population reference layer. Every headline number is read from data/processed/key_figures.json,
 which is computed by build_data.py — nothing in the narrative is hand-typed.
 
@@ -141,8 +141,8 @@ section = st.sidebar.radio(
 )
 st.sidebar.markdown("---")
 st.sidebar.markdown(
-    f"<p class='source'><b>Primary data:</b> FAOSTAT (FAO of the UN), "
-    f"{BASE_YEAR}–{LATEST_YEAR}, {K['meta']['n_countries']} countries, "
+    f"<p class='source'><b>Primary data:</b> Kaggle 'Global Spice Consumption' "
+    f"(FAOSTAT-derived), {BASE_YEAR}–{LATEST_YEAR}, {K['meta']['n_countries']} countries, "
     f"{K['meta']['n_spices_total']} spices.<br>"
     f"<b>Reference:</b> World population (Kaggle / UN WPP).</p>",
     unsafe_allow_html=True,
@@ -471,7 +471,7 @@ def render_act3():
                 "sometimes exceeds — its own production bars, year after year. It eats what it grows.")
 
     st.markdown(
-        "<div class='outside-data'>🚭 <b>Outside the data — why?</b> The FAOSTAT file contains "
+        "<div class='outside-data'>🚭 <b>Outside the data — why?</b> The dataset contains "
         "<b>no</b> information on how cloves are used; this explanation comes from <b>outside</b> "
         "the dataset. Indonesia's cloves overwhelmingly go into <i>kretek</i> — clove cigarettes — "
         "which are smoked far more than cloves are cooked with. So the world's clove supply is, in "
@@ -528,7 +528,7 @@ def render_analysis():
 
     st.markdown("### The analytical work, step by step")
     st.markdown(
-        f"1. **Profiled the raw data.** We started from a single FAOSTAT extract "
+        f"1. **Profiled the raw data.** We started from a single FAOSTAT-derived spice dataset "
         f"({K['meta']['n_countries']} countries × {K['meta']['n_spices_total']} spices × "
         f"{BASE_YEAR}–{LATEST_YEAR}, in tonnes) and inspected it before drawing anything. That "
         "surfaced four issues we had to fix: a duplicated `China` total, a stray trailing space in "
@@ -608,13 +608,17 @@ def render_credits():
 
     st.markdown("### Data sources")
     st.markdown(
-        "- **Primary — FAOSTAT, Food and Agriculture Organization of the UN.** "
-        "Crops and livestock products: production and trade (import/export) by country, "
-        f"{BASE_YEAR}–{LATEST_YEAR}. Public: https://www.fao.org/faostat/en/#data/QCL and "
+        "- **Primary (as used) — Kaggle: 'Global Spice Consumption' (harishthakur995).** A "
+        "FAOSTAT-derived table of spice production, trade and apparent consumption by country, "
+        f"{BASE_YEAR}–{LATEST_YEAR} (the consumption column is pre-computed as Production + Import "
+        "− Export). https://www.kaggle.com/datasets/harishthakur995/global-spice-consumption\n"
+        "- **Upstream origin — FAOSTAT, Food and Agriculture Organization of the UN** "
+        "(crops & livestock production and trade). https://www.fao.org/faostat/en/#data/QCL and "
         "https://www.fao.org/faostat/en/#data/TCL\n"
-        "- **Reference — World population dataset (Kaggle).** Snapshot years 1970–2022, used "
-        "only as a context/density layer. Upstream source: **UN World Population Prospects / "
-        "World Population Review.** Public: https://www.kaggle.com/datasets/iamsouravbanerjee/world-population-dataset\n"
+        "- **Reference — World population dataset (Kaggle, iamsouravbanerjee).** Snapshot years "
+        "1970–2022, used only as a context/density layer. Upstream: **UN World Population "
+        "Prospects / World Population Review.** "
+        "https://www.kaggle.com/datasets/iamsouravbanerjee/world-population-dataset\n"
     )
     st.markdown("### External context used in 'Up in Smoke'")
     st.markdown(
@@ -662,6 +666,7 @@ else:
 st.markdown("---")
 st.markdown(
     f"<p class='source'>The Secret Life of Spices · VizCon 2026 · "
-    f"Data: FAOSTAT (FAO of the UN), {BASE_YEAR}–{LATEST_YEAR} + world population (Kaggle/UN).</p>",
+    f"Data: Kaggle 'Global Spice Consumption' (FAOSTAT-derived), {BASE_YEAR}–{LATEST_YEAR} "
+    f"+ world population (Kaggle/UN).</p>",
     unsafe_allow_html=True,
 )

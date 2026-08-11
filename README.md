@@ -77,7 +77,8 @@ spice-vizcon/
 ---
 
 ## Data & honesty
-- **Primary:** FAOSTAT (FAO of the UN) — production & trade, 1995–2023.
+- **Primary (as used):** Kaggle — ["Global Spice Consumption" (harishthakur995)](https://www.kaggle.com/datasets/harishthakur995/global-spice-consumption), a FAOSTAT-derived table (consumption pre-computed as Production + Import − Export), 1995–2023.
+- **Upstream origin:** FAOSTAT (FAO of the UN) — crops & livestock production & trade.
 - **Reference:** World population (Kaggle / UN World Population Prospects) — context/density only.
 - **Consumption = Production + Imports − Exports** (apparent consumption).
 - Every headline number is computed by `build_data.py` into `data/processed/key_figures.json` and
