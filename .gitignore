@@ -5,6 +5,3 @@ __pycache__/
 venv/
 .streamlit/secrets.toml
 build.log
-
-# Internal team working notes — kept local, NOT published to the public repo
-docs/SUBMISSION_BRIEF.md

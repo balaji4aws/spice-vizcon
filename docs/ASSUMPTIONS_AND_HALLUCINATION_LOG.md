@@ -177,7 +177,7 @@ are the authoritative ones.
 
 ---
 
-## 8. Open items / to re-verify before final submission
+## 8. Open items / to re-verify
 
 - [x] Primary dataset provenance confirmed: **Kaggle "Global Spice Consumption" (harishthakur995)**,
       https://www.kaggle.com/datasets/harishthakur995/global-spice-consumption — a FAOSTAT-derived

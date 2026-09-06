@@ -1,6 +1,6 @@
 """
 The Secret Life of Spices — Grown There, Eaten Here
-VizCon 2026 entry (theme: "How the world lives, thrives, and connects").
+A personal data-visualization project.
 
 A three-act data story built on a FAOSTAT-derived global spice dataset (primary) with a world
 population reference layer. Every headline number is read from data/processed/key_figures.json,
@@ -132,7 +132,7 @@ def fmt(n):
 
 # ================================================================== SIDEBAR NAV
 st.sidebar.markdown("## 🌶️ The Secret Life of Spices")
-st.sidebar.caption("VizCon 2026 · *How the world lives, thrives & connects*")
+st.sidebar.caption("Grown There, Eaten Here")
 section = st.sidebar.radio(
     "Jump to a chapter",
     ["🏠 Start here", "① The Great Spice Boom", "② Grown There, Eaten Here",
@@ -156,7 +156,7 @@ st.sidebar.markdown(
 
 # ================================================================== SECTION: START
 def render_start():
-    st.markdown("<p class='kicker'>VizCon 2026</p>", unsafe_allow_html=True)
+    st.markdown("<p class='kicker'>Grown There, Eaten Here</p>", unsafe_allow_html=True)
     st.markdown("<div class='big-hook'>You have never grown a single spice you eat.<br>Neither has almost any country on Earth.</div>", unsafe_allow_html=True)
     st.markdown(
         "<p class='lede'>Every kitchen on the planet runs on a hidden supply chain. A pinch of "
@@ -665,7 +665,7 @@ else:
 
 st.markdown("---")
 st.markdown(
-    f"<p class='source'>The Secret Life of Spices · VizCon 2026 · "
+    f"<p class='source'>The Secret Life of Spices · "
     f"Data: Kaggle 'Global Spice Consumption' (FAOSTAT-derived), {BASE_YEAR}–{LATEST_YEAR} "
     f"+ world population (Kaggle/UN).</p>",
     unsafe_allow_html=True,

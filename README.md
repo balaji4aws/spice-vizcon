@@ -1,6 +1,6 @@
 # 🌶️ The Secret Life of Spices — *Grown There, Eaten Here*
 
-A **VizCon 2026** data-visualization contest entry (theme: *"How the world lives, thrives, and connects"*).
+A personal data-visualization project about where the world's flavour actually comes from.
 
 A three-act data story about where the world's flavour is **born** versus where it is **eaten**,
 built on 30 years of UN food-and-agriculture data covering **9 spices** across **~200 countries**.
@@ -40,19 +40,13 @@ python3 test_app.py            # headless AppTest: runs all 5 chapters, asserts 
 
 ---
 
-## Publish a public URL (Streamlit Community Cloud) — required for submission
-1. A local commit is already prepared. Create an **empty public repo** on GitHub named
-   `spice-vizcon`, then add the remote and push:
-   ```bash
-   git branch -M main
-   git remote add origin https://github.com/balaji4aws/spice-vizcon.git
-   git push -u origin main
-   ```
+## Publish a public URL (Streamlit Community Cloud)
+1. This repo is already pushed to `https://github.com/balaji4aws/spice-vizcon`.
    *(The processed data in `data/processed/` is committed so the app runs on the cloud without a
    build step. Raw data in `data/raw/` is included for transparency.)*
 2. Go to **https://share.streamlit.io** → sign in with GitHub → **New app**.
 3. Pick the repo, branch `main`, main file `app.py` → **Deploy**.
-4. You'll get a public URL like `https://<app-name>.streamlit.app` — **that's your submission link.**
+4. You'll get a public URL like `https://<app-name>.streamlit.app`.
 
 ---
 
@@ -70,8 +64,7 @@ spice-vizcon/
 └── docs/
     ├── ASSUMPTIONS_AND_HALLUCINATION_LOG.md   # every non-data claim, logged
     ├── SOURCES.md                             # data sources + citations
-    ├── GENAI_WORKFLOW.md                      # how AI was used (Best-Use-of-GenAI doc)
-    └── SUBMISSION_BRIEF.md                    # ready-to-paste submission text + checklist
+    └── GENAI_WORKFLOW.md                      # how AI was used in the build
 ```
 
 ---

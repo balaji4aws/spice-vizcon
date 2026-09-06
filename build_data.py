@@ -10,7 +10,9 @@ Reference layer : World population (Kaggle / UN World Population Prospects)
 
 Run:  python3 build_data.py
 """
-import csv, json, os
+import csv
+import json
+import os
 from collections import defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -73,10 +75,8 @@ with open(os.path.join(OUT, "spice_clean.csv"), "w", newline="") as f:
                     r["production"], r["consumption"], int(r["spice"] != GREEN)])
 
 # ---------------------------------------------------------------- load population + crosswalk
-pop_rows = []
 with open(os.path.join(RAW, "world_population.csv"), encoding="utf-8-sig") as f:
-    for r in csv.DictReader(f):
-        pop_rows.append(r)
+    pop_rows = list(csv.DictReader(f))
 
 pop_by_name = {r["Country/Territory"]: r for r in pop_rows}
 
@@ -126,7 +126,7 @@ def pop_lookup(area):
         return pop_by_name[area]
     return None
 
-spice_areas = sorted(set(r["area"] for r in spice_rows))
+spice_areas = sorted({r["area"] for r in spice_rows})
 crosswalk = []
 unmatched = []
 for a in spice_areas:
@@ -347,7 +347,7 @@ key = {
         "usa_production": usa["production"] if usa else None,
         "usa_consumption": usa["consumption"] if usa else None,
         "n_reexport_hubs": len(hubs),
-        "top_hub": (sorted(hubs, key=lambda x: -x["export"])[0] if hubs else None),
+        "top_hub": (max(hubs, key=lambda x: x["export"]) if hubs else None),
         # big consumers that grow the least of what they eat (self-sufficiency), consumption > 50k t
         "least_self_sufficient_big": sorted(
             [r for r in grown_eaten if r["consumption"] and r["consumption"] > 50000
