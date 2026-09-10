@@ -46,7 +46,7 @@ Status: **Handled** — proxy year is labelled wherever used.
 
 ## 3. Population data provenance (honest note)
 
-- The population file used is the one supplied by the team, **downloaded from Kaggle**
+- The population file used was **downloaded from Kaggle**
   ("World Population Dataset"). Its upstream source is the **UN World Population Prospects /
   World Population Review**.
 - The AI did **not** independently download a separate "official UN" file. We cite the
@@ -146,7 +146,7 @@ values and must NOT be presented as fact:
 filter, never as a hero number. The defensible, believable signal we do surface: among
 large nations, spice-heavy cuisines (Nepal, Sri Lanka, Thailand, Bangladesh, Malaysia,
 India, Türkiye, Nigeria, Ghana) rank highest — consistent with real culinary reality.
-Population is used mainly for context/density, per the team's instruction.
+Population is used mainly for context/density, by design.
 
 Status: **Handled** — caveat shown in-app; per-capita never used as a standalone claim.
 
@@ -185,6 +185,8 @@ are the authoritative ones.
       cited FAOSTAT directly, which overstated provenance; corrected to name the dataset as used.
 - [x] Population file: Kaggle "World Population Dataset" (iamsouravbanerjee); upstream UN WPP /
       World Population Review.
-- [ ] Add the external citation(s) for the kretek/clove-cigarette explanation (Finding 3 / "Up in Smoke").
-
-(These are placeholders to fill with the team's real source links — not fabricated URLs.)
+- [x] External citation(s) for the kretek/clove-cigarette explanation (Finding 3 / "Up in Smoke")
+      added: World Bank *The Economics of Clove Farming in Indonesia*, Cornell University news
+      (2024), and Campaign for Tobacco-Free Kids. Listed in full in
+      [`SOURCES.md`](SOURCES.md#external-context-not-from-the-datasets--cited-where-used) and
+      surfaced in the app's *Sources & credits* chapter.

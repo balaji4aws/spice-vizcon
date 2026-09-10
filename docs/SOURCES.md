@@ -21,8 +21,8 @@
 - **Source as used:** Kaggle "World Population Dataset."
   https://www.kaggle.com/datasets/iamsouravbanerjee/world-population-dataset
 - **Upstream origin:** UN World Population Prospects / World Population Review.
-- **Honest note:** we used the Kaggle file the team supplied; we did **not** separately download a
-  distinct "official UN" file and do not claim to.
+- **Honest note:** the Kaggle file above is what was used; a distinct "official UN" file was **not**
+  separately downloaded, and no such claim is made.
 
 ## External context (NOT from the datasets) — cited where used
 - **Finding 3 ("Up in Smoke"), cloves → *kretek* clove cigarettes.** The datasets contain no
