@@ -26,8 +26,10 @@ st.set_page_config(
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PROC = os.path.join(HERE, "data", "processed")
-LATEST_YEAR = 2023
-BASE_YEAR = 1995
+
+# Green chillies are a fresh vegetable crop at ~50M t/yr; they are excluded from
+# every dried-spice comparison so the scale stays honest. Named once, used everywhere.
+GREEN_CHILLI = "Chillies (green)"
 
 # ------------------------------------------------------------------ palette
 # Spice-warm identity. We never rely on colour ALONE to convey meaning
@@ -70,6 +72,11 @@ def load_keys():
         return json.load(f)
 
 K = load_keys()
+
+# The year range is read from the pipeline output, never hard-coded here, so the
+# narrative can never drift from the data it describes.
+BASE_YEAR = K["meta"]["base_year"]
+LATEST_YEAR = K["meta"]["latest_year"]
 
 # ------------------------------------------------------------------ styling
 st.markdown(
@@ -177,7 +184,8 @@ def render_start():
         st.metric("Years of data", f"{BASE_YEAR}–{LATEST_YEAR}")
     with c4:
         mult = K["world_dried_total_latest_t"] / K["world_dried_total_base_t"]
-        st.metric("World spice output", f"{mult:.1f}×", help="Dried-spice production, 1995 → 2023")
+        st.metric("World spice output", f"{mult:.1f}×",
+                  help=f"Dried-spice production, {BASE_YEAR} → {LATEST_YEAR}")
 
     st.markdown("### Three findings, one story")
     a, b, c = st.columns(3)
@@ -213,7 +221,7 @@ def render_start():
 def render_act1():
     g = load_csv("global_by_spice_year.csv")
     growth = load_csv("growth_1995_latest.csv")
-    dried = g[g["spice"] != "Chillies (green)"]
+    dried = g[g["spice"] != GREEN_CHILLI]
 
     st.markdown("<p class='kicker'>Finding 01 · How the world's taste changed</p>", unsafe_allow_html=True)
     st.markdown("<div class='big-hook'>The Great Spice Boom</div>", unsafe_allow_html=True)
@@ -228,12 +236,13 @@ def render_act1():
     )
 
     # Growth multiples bar
-    gd = growth[growth["spice"] != "Chillies (green)"].sort_values("multiple", ascending=True)
+    gd = growth[growth["spice"] != GREEN_CHILLI].sort_values("multiple", ascending=True)
     fig = go.Figure()
     fig.add_bar(
         x=gd["multiple"], y=gd["spice"], orientation="h",
         marker_color=[SPICE_COLORS[s] for s in gd["spice"]],
-        text=[f"{m:.1f}× (+{p:.0f}%)" for m, p in zip(gd["multiple"], gd["pct_change"])],
+        text=[f"{m:.1f}× (+{p:.0f}%)"
+              for m, p in zip(gd["multiple"], gd["pct_change"], strict=True)],
         textposition="outside", cliponaxis=False,
     )
     fig.update_layout(title=f"How much each spice's world output multiplied, {BASE_YEAR} → {LATEST_YEAR}",
@@ -252,7 +261,9 @@ def render_act1():
         DRIED_ORDER, default=["Ginger", "Anise/Cumin/Coriander", "Pepper", "Chillies (dry)"],
     )
     log = st.toggle("Log scale (helps compare small vs large spices)", value=False)
-    if sel:
+    if not sel:
+        st.info("Pick at least one spice above to draw the production-over-time chart.")
+    else:
         dd = dried[dried["spice"].isin(sel)]
         fig2 = px.line(
             dd, x="year", y="world_production", color="spice",
@@ -264,8 +275,8 @@ def render_act1():
         if log:
             fig2.update_yaxes(type="log")
         st.plotly_chart(style_fig(fig2, 460), width="stretch")
-        alt_caption("Line chart of annual world production per selected spice, 1995–2023. "
-                    "Ginger shows the steepest sustained climb.")
+        alt_caption(f"Line chart of annual world production per selected spice, "
+                    f"{BASE_YEAR}–{LATEST_YEAR}. Ginger shows the steepest sustained climb.")
 
     st.markdown(
         f"<div class='datacard'>🫚 <b>The ginger explosion.</b> Ginger production went from "
@@ -335,9 +346,10 @@ def render_act2():
                  marker_color=CHILI,
                  text=[f"{v:.1f}%" for v in lsb["self_sufficiency_pct"]],
                  textposition="outside", cliponaxis=False)
-    fig2.update_layout(title="Share of consumed spice that each country grows itself (2023)",
-                       xaxis_title="Grows % of what it eats", yaxis_title="")
-    fig2.update_xaxes(range=[0, max(lsb["self_sufficiency_pct"]) * 1.25 + 5])
+    fig2.update_layout(
+        title=f"Share of consumed spice that each country grows itself ({LATEST_YEAR})",
+        xaxis_title="Grows % of what it eats", yaxis_title="")
+    fig2.update_xaxes(range=[0, lsb["self_sufficiency_pct"].max() * 1.25 + 5])
     st.plotly_chart(style_fig(fig2, 380), width="stretch")
     alt_caption("Bar chart of large spice-consuming nations. Germany, Saudi Arabia and the UK "
                 "sit near 0%; the USA at 0.2%. All depend almost entirely on imports.")
@@ -358,18 +370,24 @@ def render_act2():
     spice = st.selectbox("Choose a spice", DRIED_ORDER, index=DRIED_ORDER.index("Cinnamon"))
     ts = trace[(trace["spice"] == spice) & (trace["cca3"].notna()) & (trace["cca3"] != "")].copy()
 
+    # Both maps are filtered to non-zero values so a country that grows (or eats) none of
+    # this spice renders as no-data grey rather than the palest shade of the colour scale —
+    # otherwise "grows nothing" and "grows a little" look identical, which is the whole point.
+    ts_grown = ts[ts["production"] > 0]
+    ts_eaten = ts[ts["consumption"] > 0]
+
     colp, colc = st.columns(2)
-    prod_top = ts.sort_values("production", ascending=False).head(1)
-    cons_top = ts[ts["consumption"] > 0].sort_values("consumption", ascending=False).head(1)
+    prod_top = ts_grown.sort_values("production", ascending=False).head(1)
+    cons_top = ts_eaten.sort_values("consumption", ascending=False).head(1)
     with colp:
-        figp = px.choropleth(ts, locations="cca3", color="production", hover_name="area",
+        figp = px.choropleth(ts_grown, locations="cca3", color="production", hover_name="area",
                              color_continuous_scale="YlOrBr")
         figp.update_geos(bgcolor="rgba(0,0,0,0)", showframe=False, showcoastlines=False,
                          projection_type="natural earth")
         figp.update_layout(title=f"Where {spice} is GROWN", coloraxis_showscale=False)
         st.plotly_chart(style_fig(figp, 320), width="stretch")
     with colc:
-        figc = px.choropleth(ts[ts["consumption"] > 0], locations="cca3", color="consumption",
+        figc = px.choropleth(ts_eaten, locations="cca3", color="consumption",
                              hover_name="area", color_continuous_scale="OrRd")
         figc.update_geos(bgcolor="rgba(0,0,0,0)", showframe=False, showcoastlines=False,
                          projection_type="natural earth")
@@ -385,7 +403,8 @@ def render_act2():
             unsafe_allow_html=True,
         )
     alt_caption(f"Two side-by-side world maps for {spice}: production on the left, apparent "
-                "consumption on the right. Compare how the coloured regions differ.")
+                "consumption on the right. Grey means the country reports none of this spice. "
+                "Compare how the coloured regions differ.")
 
     with st.expander("🧑‍🤝‍🧑 Optional reference layer: spice per person (handle with care)"):
         st.markdown(
@@ -435,7 +454,8 @@ def render_act3():
     fig = go.Figure()
     fig.add_bar(x=top1["share_pct"], y=top1["spice"], orientation="h",
                 marker_color=[SPICE_COLORS.get(s, CINNAMON) for s in top1["spice"]],
-                text=[f"{a} · {p:.0f}%" for a, p in zip(top1["area"], top1["share_pct"])],
+                text=[f"{a} · {p:.0f}%"
+                      for a, p in zip(top1["area"], top1["share_pct"], strict=True)],
                 textposition="outside", cliponaxis=False)
     fig.update_layout(title=f"How much the #1 country controls of each spice ({LATEST_YEAR})",
                       xaxis_title="Top producer's share of world output (%)", yaxis_title="")
@@ -503,8 +523,9 @@ def render_act3():
                        xaxis_title="Year", yaxis_title="% of world output")
     fig3.update_yaxes(range=[0, 100])
     st.plotly_chart(style_fig(fig3, 380), width="stretch")
-    alt_caption("Line chart: Madagascar's share of global vanilla rises from about 20–25% around "
-                "2000 to roughly 45% by 2023 — a single country holding up a global luxury crop.")
+    alt_caption(f"Line chart: Madagascar's share of global vanilla rises from about 20–25% around "
+                f"2000 to roughly {v['madagascar_share_pct_latest']:.0f}% by {LATEST_YEAR} — a "
+                "single country holding up a global luxury crop.")
 
     st.markdown(
         "<div class='datacard'>🌍 <b>The through-line.</b> From cumin to cloves to vanilla, the "
@@ -531,9 +552,9 @@ def render_analysis():
         f"1. **Profiled the raw data.** We started from a single FAOSTAT-derived spice dataset "
         f"({K['meta']['n_countries']} countries × {K['meta']['n_spices_total']} spices × "
         f"{BASE_YEAR}–{LATEST_YEAR}, in tonnes) and inspected it before drawing anything. That "
-        "surfaced four issues we had to fix: a duplicated `China` total, a stray trailing space in "
-        "the `Export ` column header, negative 'consumption' values, and one spice behaving at a "
-        "completely different scale (green chillies).\n"
+        "surfaced four issues we had to handle: a duplicated `China` total, a stray trailing space "
+        "in the `Export ` column header, negative 'consumption' values, and one spice behaving at "
+        "a completely different scale (green chillies).\n"
         "2. **Derived a consumption measure.** The file gives production and trade, so we work in "
         "**apparent consumption = Production + Imports − Exports** — a standard proxy for how much "
         "of a spice stays in a country for domestic use.\n"
@@ -564,13 +585,19 @@ def render_analysis():
         "to avoid double-counting.\n"
         "- **Set green chillies aside** (~50M t/yr, effectively a fresh vegetable) so scale "
         "comparisons among the eight dried spices stay legible and honest.\n"
+        f"- **Negative apparent consumption is kept, not deleted.** "
+        f"{K['meta']['negative_consumption_rows']:,} country-spice-year rows come out below zero "
+        "(a country exported more than it produced plus imported, drawing down stock). These are "
+        "real reported data, so they stay in the cleaned file, but every consumption *ratio* and "
+        "map excludes them — a negative denominator would be meaningless.\n"
         f"- **Population crosswalk:** {K['meta']['crosswalk_matched']} of "
         f"{K['meta']['n_countries']} countries matched; the {K['meta']['crosswalk_unmatched']} "
         "unmatched are defunct entities (e.g. Belgium-Luxembourg) with no recent data.\n"
-        "- **2022 population used as a proxy for 2023** (the population file has no 2023 value; "
+        f"- **2022 population used as a proxy for {LATEST_YEAR}** (the population file has no "
+        f"{LATEST_YEAR} value; "
         "population moves ~1%/yr, so this is a small approximation).\n"
-        "- **Baseline year 1995** for the 30-year 'boom' (the file technically starts in 1993, but "
-        "the first two years have thinner coverage).")
+        f"- **Baseline year {BASE_YEAR}** for the 30-year 'boom' (the file technically starts in "
+        "1993, but the first two years have thinner coverage).")
 
     st.markdown("### Assumptions & things to keep in mind")
     st.markdown(
@@ -580,8 +607,10 @@ def render_analysis():
         "- **Per-capita is a rough reference only.** Small nations and producer/trade-hub countries "
         "are distorted — e.g. Guyana (~64 kg/person) and Nepal (~13 kg/person, a ginger *producer*) "
         "are artifacts, not real eating rates; hubs like the UAE reflect trade flow, not eating.\n"
-        "- **2022 population stands in for 2023** (the population file has no 2023 value).\n"
-        "- **1995 is the starting line for the boom**; part of the 30-year rise also reflects "
+        f"- **2022 population stands in for {LATEST_YEAR}** (the population file has no "
+        f"{LATEST_YEAR} value).\n"
+        f"- **{BASE_YEAR} is the starting line for the boom**; part of the 30-year rise also "
+        "reflects "
         "improved FAOSTAT reporting over time, not only real production growth."
     )
     st.markdown(
@@ -601,10 +630,8 @@ def render_credits():
     st.markdown("<p class='kicker'>The fine print</p>", unsafe_allow_html=True)
     st.markdown("## 📎 Sources & credits")
 
-    st.markdown("### Team")
-    st.markdown(
-        "Built by **Ashish Chauhan**, **KP Bhat**, and **Balaji Venkatesh** — "
-        "a trio of data/BI practitioners.")
+    st.markdown("### Author")
+    st.markdown("Built by **Balaji Venkatesh** — data/BI practitioner.")
 
     st.markdown("### Data sources")
     st.markdown(
@@ -643,10 +670,10 @@ def render_credits():
 
     st.markdown("### A note on tools")
     st.markdown(
-        "Built by the team in **Python** with **Streamlit** (app), **Plotly** (charts) and "
-        "**pandas** (data). We used AI/LLM tools to assist with data profiling, code, and "
-        "drafting; the team led the analysis, made the editorial calls, and validated every "
-        "figure against the source data.")
+        "Built in **Python** with **Streamlit** (app), **Plotly** (charts) and **pandas** "
+        "(data). AI/LLM tools assisted with data profiling, code, and drafting; the analysis, "
+        "the editorial calls, and the validation of every figure against the source data were "
+        "author-led.")
 
 
 # ================================================================== ROUTER
