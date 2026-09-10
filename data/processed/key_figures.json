@@ -11,7 +11,8 @@
       "Belgium-Luxembourg",
       "Serbia and Montenegro",
       "Sudan (former)"
-    ]
+    ],
+    "negative_consumption_rows": 2448
   },
   "act1_boom": {
     "ginger_multiple": 6.52,
