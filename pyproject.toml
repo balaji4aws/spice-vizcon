@@ -1,0 +1,26 @@
+[tool.ruff]
+# Prose-heavy Streamlit narrative: long f-strings of copy are the norm here.
+line-length = 110
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes
+    "W",    # pycodestyle warnings
+    "I",    # import sorting
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "C4",   # comprehensions
+    "SIM",  # simplify
+    "RUF",  # ruff-specific
+]
+ignore = [
+    "E501",    # line length is enforced by the formatter budget above, not per-line nits
+    "RUF001",  # narrative copy intentionally uses en dashes, × and other typographic characters
+    "RUF003",
+    "C408",    # dict(...) reads better than {...} for Plotly layout kwargs
+]
+
+[tool.ruff.format]
+quote-style = "double"
