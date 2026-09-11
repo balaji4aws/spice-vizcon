@@ -31,5 +31,8 @@ jobs:
           git diff --exit-code -- data/processed/ \
             || (echo "::error::data/processed/ is out of date - rerun build_data.py and commit" && exit 1)
 
+      - name: Cross-verify every claim against the raw data
+        run: python verify_claims.py
+
       - name: Smoke test every chapter
         run: python test_app.py
