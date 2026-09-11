@@ -77,6 +77,7 @@ K = load_keys()
 # narrative can never drift from the data it describes.
 BASE_YEAR = K["meta"]["base_year"]
 LATEST_YEAR = K["meta"]["latest_year"]
+SPAN_YEARS = LATEST_YEAR - BASE_YEAR  # 28, not the "30" the copy used to round it to
 
 # ------------------------------------------------------------------ styling
 st.markdown(
@@ -168,7 +169,8 @@ def render_start():
     st.markdown(
         "<p class='lede'>Every kitchen on the planet runs on a hidden supply chain. A pinch of "
         "cinnamon, a spoon of cumin, the vanilla in your ice cream — each one travelled a "
-        "secret map before it reached you. Using 30 years of UN food-and-agriculture data on "
+        f"secret map before it reached you. Using {SPAN_YEARS} years of UN food-and-agriculture "
+        "data on "
         "<b>9 spices</b> across <b>nearly 200 countries</b>, this is the story of where the "
         "world's flavour is <i>born</i> versus where it is <i>eaten</i> — and the three "
         "surprises hiding in the gap.</p>",
@@ -192,7 +194,7 @@ def render_start():
     with a:
         st.markdown(
             f"<div class='datacard'><b>① The Great Spice Boom</b><br>"
-            f"The world got <b>{mult:.1f}× spicier</b> in 30 years. Ginger alone is up "
+            f"The world got <b>{mult:.1f}× spicier</b> in {SPAN_YEARS} years. Ginger alone is up "
             f"<b>{K['act1_boom']['ginger_pct']:.0f}%</b>.</div>",
             unsafe_allow_html=True,
         )
@@ -227,8 +229,9 @@ def render_act1():
     st.markdown("<div class='big-hook'>The Great Spice Boom</div>", unsafe_allow_html=True)
     mult = K["world_dried_total_latest_t"] / K["world_dried_total_base_t"]
     st.markdown(
-        f"<p class='lede'>Your kitchen changed more in the last 30 years than in the previous "
-        f"300. Between {BASE_YEAR} and {LATEST_YEAR}, world production of dried spices grew from "
+        f"<p class='lede'>Your kitchen changed more in the last {SPAN_YEARS} years than in the "
+        "previous 300. "
+        f"Between {BASE_YEAR} and {LATEST_YEAR}, world production of dried spices grew from "
         f"<b>{fmt(K['world_dried_total_base_t'])} tonnes</b> to "
         f"<b>{fmt(K['world_dried_total_latest_t'])} tonnes</b> — roughly <b>{mult:.1f}×</b>. "
         "This isn't just more people eating; it's the whole planet's palate globalising.</p>",
@@ -596,7 +599,7 @@ def render_analysis():
         f"- **2022 population used as a proxy for {LATEST_YEAR}** (the population file has no "
         f"{LATEST_YEAR} value; "
         "population moves ~1%/yr, so this is a small approximation).\n"
-        f"- **Baseline year {BASE_YEAR}** for the 30-year 'boom' (the file technically starts in "
+        f"- **Baseline year {BASE_YEAR}** for the {SPAN_YEARS}-year 'boom' (the file starts in "
         "1993, but the first two years have thinner coverage).")
 
     st.markdown("### Assumptions & things to keep in mind")
@@ -609,7 +612,8 @@ def render_analysis():
         "are artifacts, not real eating rates; hubs like the UAE reflect trade flow, not eating.\n"
         f"- **2022 population stands in for {LATEST_YEAR}** (the population file has no "
         f"{LATEST_YEAR} value).\n"
-        f"- **{BASE_YEAR} is the starting line for the boom**; part of the 30-year rise also "
+        f"- **{BASE_YEAR} is the starting line for the boom**; part of the {SPAN_YEARS}-year rise "
+        "also "
         "reflects "
         "improved FAOSTAT reporting over time, not only real production growth."
     )

@@ -3,6 +3,7 @@
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://spice-vizcon.streamlit.app)
 [![CI](https://github.com/balaji4aws/spice-vizcon/actions/workflows/ci.yml/badge.svg)](https://github.com/balaji4aws/spice-vizcon/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ### ▶️ **[Open the live app → spice-vizcon.streamlit.app](https://spice-vizcon.streamlit.app)**
 
@@ -18,9 +19,9 @@
 An interactive web app that tells one story with data: **the countries that eat the most spice
 are almost never the countries that grow it.**
 
-It's built on 30 years of United Nations food data — 9 spices, 198 countries, 1995 to 2023, about
-45,000 rows. The app walks you through three findings, one chapter at a time, with charts and
-world maps you can click around in.
+It's built on 28 years of United Nations food data — 9 spice categories, 198 countries, 1995 to
+2023, about 45,000 rows. The app walks you through three findings, one chapter at a time, with
+charts and world maps you can click around in.
 
 > **The hook:** you have never grown a single spice you eat — and neither has almost any country
 > on Earth. Your spice rack is a map of somewhere else.
@@ -31,7 +32,7 @@ world maps you can click around in.
 
 | # | Finding | The headline number |
 |---|---|---|
-| 1 | **The Great Spice Boom** — the world is eating far more spice than it used to. | World dried-spice production grew **4.6× in 30 years**. Ginger alone is up **552%**. |
+| 1 | **The Great Spice Boom** — the world is eating far more spice than it used to. | World dried-spice production grew **4.6× between 1995 and 2023**. Ginger alone is up **552%**. |
 | 2 | **Grown There, Eaten Here** — the big eaters barely grow any of it. | The USA grows just **0.2%** of the spice it eats. Germany, Saudi Arabia and the UK are near **0%**. |
 | 3 | **Up in Smoke** — some spices belong to a single country. | Indonesia grows **73%** of the world's cloves and keeps almost all of them — because most go into clove *cigarettes*, not food. |
 
@@ -51,6 +52,7 @@ The data uses a few terms that are worth knowing before you dive in. None of the
 | **Self-sufficiency** | Of everything a country eats, the share it grew itself. The USA at 0.2% means it grows about 1 kg for every 500 kg it consumes. |
 | **Choropleth** | A map where each country is shaded by a value — darker means more. Two of them side by side is how Finding 2 works. |
 | **Tonnes** | Metric tonnes: 1,000 kg. All quantities in this project are in tonnes. |
+| **"9 spices"** | Really 9 FAOSTAT *categories*, not 9 individual spices. One of them bundles anise, cumin and coriander together; another bundles nutmeg, mace and cardamom. The app names the group rather than pretending to isolate a single spice. |
 
 **One honest caveat, up front:** apparent consumption measures what's *available* in a country,
 not what people literally put on their plates. Food that gets industrially processed, stockpiled,
@@ -72,8 +74,9 @@ If you're reviewing this as work sample, here's what's in it:
 - **A reproducible pipeline** — one script (`build_data.py`) computes every number in the story
   and writes it to a file. The app only ever *reads* that file, so no statistic is ever typed by
   hand into the narrative.
-- **Automated tests and CI** — a test opens every chapter of the app and fails if any of them
-  crashes. GitHub Actions runs it, plus a linter, on every push.
+- **Automated tests and CI** — one test opens every chapter and fails if any crashes; another
+  independently recomputes all 61 factual claims from the raw data and fails if any figure in the
+  app or this README doesn't match. GitHub Actions runs both, plus a linter, on every push.
 - **Accessibility as a requirement, not an afterthought** — see [Design choices](#design-choices).
 - **Documented judgement calls** — [`docs/`](docs/) records where the analysis relies on
   interpretation, where it could be wrong, and which claims come from outside the data.
@@ -127,14 +130,25 @@ second and should leave the files unchanged, which is the point.
 ## Quality checks
 
 ```bash
-python3 test_app.py    # opens all 6 chapters, fails if any of them errors
-ruff check .           # code style (pip install ruff first)
+python3 verify_claims.py   # re-checks all 61 factual claims against the raw data
+python3 test_app.py        # opens all 6 chapters, fails if any of them errors
+ruff check .               # code style (pip install ruff first)
 ```
 
-`test_app.py` uses Streamlit's own testing tools to load each chapter without a browser and check
-that nothing crashes. It exits with an error code on failure, so CI can catch it.
+**`verify_claims.py` is the interesting one.** Every number stated in the app or this README —
+the 4.6× boom, the USA's 0.2%, Indonesia's 73% of cloves, all of it — is recomputed from the raw
+CSVs and compared against what's claimed. It's written with pandas, while the pipeline uses the
+standard-library `csv` module, so the two are independent implementations. Agreement means the
+figure is genuinely corroborated, not just consistently wrong twice.
 
-[GitHub Actions](.github/workflows/ci.yml) runs both of these on every push, and also re-runs
+It also checks the *qualitative* claims: that every dried spice grew, that cloves grew the least,
+that Guatemala really does lead the nutmeg/mace/cardamom group, that the countries called out as
+per-capita artifacts genuinely are artifacts.
+
+`test_app.py` uses Streamlit's own testing tools to load each chapter without a browser and check
+that nothing crashes. Both scripts exit with an error code on failure, so CI can catch them.
+
+[GitHub Actions](.github/workflows/ci.yml) runs all three on every push, and also re-runs
 `build_data.py` to confirm the committed data still matches what the code produces.
 
 ---
@@ -146,8 +160,10 @@ spice-vizcon/
 ├── app.py                      # the web app — 6 chapters of charts and maps
 ├── build_data.py               # the pipeline: raw CSVs → processed data + key_figures.json
 ├── test_app.py                 # loads every chapter and checks none of them crash
+├── verify_claims.py            # recomputes all 61 claims from raw data, independently
 ├── requirements.txt            # streamlit, pandas, plotly
 ├── pyproject.toml              # code style rules
+├── LICENSE                     # MIT (covers the code, not the third-party data)
 ├── .github/workflows/ci.yml    # runs tests, style checks, and the data check on every push
 ├── .streamlit/config.toml      # the warm colour theme, defined in one place
 ├── data/
@@ -224,5 +240,17 @@ Built by **Balaji Venkatesh**.
 
 ## License
 
-No licence file yet, which by default means all rights reserved. If you'd like to reuse any of
-this, please get in touch.
+**Code:** [MIT](LICENSE) — use it, change it, ship it, just keep the copyright notice.
+
+**Data:** not mine to license. The two CSVs in `data/raw/` are third-party:
+
+- The upstream FAOSTAT figures are published by the FAO under
+  **[CC BY 4.0](https://www.fao.org/contact-us/terms/db-terms-of-use/en)**, which permits reuse
+  and redistribution as long as the FAO is credited and the data isn't presented as an official
+  FAO product. *(Terms paraphrased; see the linked page for the authoritative wording.)*
+- The two Kaggle compilations used here
+  ([spices](https://www.kaggle.com/datasets/harishthakur995/global-spice-consumption),
+  [population](https://www.kaggle.com/datasets/iamsouravbanerjee/world-population-dataset))
+  carry their own terms on their respective dataset pages — check those before redistributing.
+
+If you build on the analysis, a link back is appreciated but not required.
